@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>Kafka Snake</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+  <h1>Kafka Snake</h1>
+  <div id="canvas" style="height:500px; width:500px; border: 1px solid black;">
+    <div id="snake" style="height:5px; width:5px; border: 1px solid black; background-color: black; position: relative; left: 0px; top: 0px;"></div>
+  </div>
+  <script type="text/javascript">    
+    var move = function(direction) {
+      var x = parseFloat($("#snake").css('left'));
+      var y = parseFloat($("#snake").css('top'));
+      
+      if (direction == 'up') {
+        $("#snake").css('top', function(v) {          
+          return y - 5;
+        });
+      } else if (direction == 'down') {
+        $("#snake").css('top', function(v) {
+          return y + 5;
+        });
+      } else if (direction == 'left') {
+        $("#snake").css('left', function(h) {
+          return x - 5;
+        });
+      } else {
+        $("#snake").css('left', function(h) {
+          return x + 5;
+        });
+      }      
+    };
+
+    const socket = io('http://localhost:8888');
+    socket.on('connect', function () {
+      socket.on('keys', function (data) {
+        move(data);
+      });
+    });    
+  </script>
+</body>
+</html>
